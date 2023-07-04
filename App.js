@@ -5,7 +5,9 @@ import Signin from './src/authScreen/Signin';
 import Signup from './src/authScreen/Signup';
 import Forgetpassword from './src/authScreen/Forgetpassword';
 import BottomTab from './src/displayScreen/BottomTab';
+
 import EditDetail from './src/displayScreen/EditDetail';
+import PermissionScreen from './src/displayScreen/PermissionScreen';
 
 // importing react-native-navigation tools
 import {NavigationContainer} from '@react-navigation/native';
@@ -35,6 +37,11 @@ export default function App() {
             headerTitle: 'Edit Profile',
             headerTitleAlign: 'center',
           }}
+        />
+        <nativeStack.Screen
+          name="permission"
+          component={PermissionScreen}
+          options={{presentation: 'modal', headerShown: false}}
         />
       </nativeStack.Navigator>
     </NavigationContainer>

@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
-import {Text, View, Image, TextInput, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 
 const tempImage = require('../Images/blank_picture.jpg');
 
-export default function EditDetail() {
+export default function EditDetail({navigation}) {
   const [userData, setUserData] = useState({
     username: '',
     title: '',
@@ -12,21 +20,24 @@ export default function EditDetail() {
     twitter: '',
   });
 
-  const handleInputChange = ({key, value}) => {
-    setUserData(preData => ({
-      ...preData,
-      [key]: value,
-    }));
+  const handleInputChange = (key, value) => {
+    setUserData({...userData, [key]: value});
   };
 
   const handleSubmit = () => {
     console.log(userData);
   };
 
+  const handleProfileClick = () => {
+    navigation.navigate('permission');
+  };
+
   return (
-    <View>
+    <ScrollView>
       <View className="flex items-center mt-8">
-        <Image className="h-32 w-32 rounded-full" source={tempImage} />
+        <Pressable onPress={handleProfileClick}>
+          <Image className="h-32 w-32 rounded-full" source={tempImage} />
+        </Pressable>
       </View>
       <View className="ml-8 mt-8">
         <Text className="font-bold text-md color-gray-400"> Username </Text>
@@ -63,6 +74,6 @@ export default function EditDetail() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
