@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Text,
   View,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
@@ -69,21 +68,6 @@ export default function Dashboard({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* products */}
-      {/* <View className=" border-2 h-56 w-40 m-6 rounded-xl">
-        <Image
-          source={{uri: `${data.image}`}}
-          className="h-32 w-40"
-          resizeMode="contain"
-        />
-        <Text numberOfLines={2} className="mt-2 text-md text-black">
-          {' '}
-          {data.title}{' '}
-        </Text>
-        <TouchableOpacity>
-          <Text className="text-blue-900 font-extrabold text-center mt-4"> View Product </Text>
-        </TouchableOpacity>
-      </View> */}
       <View>
         <FlatList
           data={data}

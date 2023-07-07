@@ -9,6 +9,7 @@ import BottomTab from './src/displayScreen/BottomTab';
 import EditDetail from './src/displayScreen/EditDetail';
 import PermissionScreen from './src/displayScreen/PermissionScreen';
 import ItemScreen from './src/displayScreen/ItemScreen';
+import Cart from './src/displayScreen/Cart';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -49,6 +50,11 @@ export default function Main() {
         <nativeStack.Screen
           name="item-screen"
           component={ItemScreen}
+          options={{presentation: 'modal', headerShown: false}}
+        />
+        <nativeStack.Screen
+          name="cart"
+          component={Cart}
           options={{presentation: 'modal', headerShown: false}}
         />
       </nativeStack.Navigator>
