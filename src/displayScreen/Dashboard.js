@@ -1,90 +1,92 @@
 import React from 'react';
+
 import {
-  ScrollView,
   Text,
   View,
+  ScrollView,
   TextInput,
-  Button,
+  TouchableOpacity,
   Image,
-  Pressable,
+  FlatList,
+  SafeAreaView,
 } from 'react-native';
 
+import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-const useTemp = require('../Images/blank_picture.jpg');
-
-import {useSelector} from 'react-redux';
+import {useProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
 export default function Dashboard({navigation}) {
-  const username = useSelector(state => state.data.username);
-  const title = useSelector(state => state.data.title);
-  const email = useSelector(state => state.data.email);
-  const mobile = useSelector(state => state.data.mobile);
-  const twitter = useSelector(state => state.data.twitter);
+  const {data, isSuccess} = useProductDisplayAPIQuery();
 
-  const handlePress = () => {
-    navigation.navigate('user');
-  };
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const Item = ({title, image, id}) => (
+    <View className="h-52 w-44 mt-6 ml-3 mr-2 rounded-xl">
+      <Image
+        source={{uri: `${image}`}}
+        className="h-32 w-40"
+        resizeMode="contain"
+      />
+      <Text numberOfLines={2} className="font-bold text-md mt-2">
+        {' '}
+        {title}
+      </Text>
+      <TouchableOpacity onPress={() => console.log(`${id}`)}>
+        <Text className="font-extrabold mt-2 text-blue-600 text-center"> View Item </Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     // main container view
-    <ScrollView className="container">
-      {/* blue color view */}
-      <View className="flex bg-blue-600 h-96 rounded-b-3xl">
-        {/* it holds the two component home and edit */}
-        <View className="flex flex-row mt-8">
-          <View className="ml-auto">
-            <Text className="text-white text-2xl"> Home </Text>
-          </View>
-          <Pressable
-            className="ml-28 mr-6"
-            onPress={() => navigation.navigate('edit-detail')}>
-            <MaterialIcons name="edit" color="white" size={30} />
-          </Pressable>
+    <SafeAreaView>
+      {/* for home and menu , notification and shopping icons */}
+      <View className="flex flex-row justify-between">
+        <View className="flex flex-row gap-6 pl-4 pt-2">
+          <Entypo name="menu" color="black" size={30} className="ml-4" />
+          <Text className="text-lg font-bold text-black"> Home </Text>
         </View>
-        {/* image */}
-        <View className="flex items-center mt-8">
-          <Image className="h-32 w-32 rounded-full" source={useTemp} />
-        </View>
-        {/* username and title */}
-        <View className="flex items-center mt-6">
-          <Text className="text-2xl text-white font-bold"> {username} </Text>
-          <Text className="text-lg text-white"> {title} </Text>
-        </View>
-        {/* followers and following */}
-        <View className="flex flex-row mt-8">
-          <View className="basis-1/2 border-r-2 border-white">
-            <Text className="text-center text-white text-xl">
-              {' '}
-              0 Followers{' '}
-            </Text>
-          </View>
-          <View className="basis-1/2">
-            <Text className="text-white text-xl text-center">
-              {' '}
-              0 Followings{' '}
-            </Text>
-          </View>
+        <View className="flex flex-row pr-4 gap-6 pt-2">
+          <Ionicons name="notifications" color="black" size={30} />
+          <MaterialIcons name="shopping-bag" color="black" size={30} />
         </View>
       </View>
-      {/* white color view */}
-      <View className="mt-8 ml-8">
-        <Text className="text-lg"> Email </Text>
-        <Text className="text-xl text-black text-bold"> {email} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
-        <Text className="text-lg mt-8"> Phone No </Text>
-        <Text className="text-xl text-black text-bold"> {mobile} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
-        <Text className="text-lg mt-8"> Twitter </Text>
-        <Text className="text-xl text-black text-bold"> {twitter} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
+      {/* search bar */}
+      <View className="flex items-center mt-4">
+        <View className="flex flex-row border-2 border-gray-500 h-10 rounded-lg">
+          <TextInput className="w-72" placeholder="What are you looking for?" />
+          <TouchableOpacity className="mt-1">
+            <EvilIcons name="search" color="gray" size={30} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </ScrollView>
+      {/* products */}
+      {/* <View className=" border-2 h-56 w-40 m-6 rounded-xl">
+        <Image
+          source={{uri: `${data.image}`}}
+          className="h-32 w-40"
+          resizeMode="contain"
+        />
+        <Text numberOfLines={2} className="mt-2 text-md text-black">
+          {' '}
+          {data.title}{' '}
+        </Text>
+        <TouchableOpacity>
+          <Text className="text-blue-900 font-extrabold text-center mt-4"> View Product </Text>
+        </TouchableOpacity>
+      </View> */}
+      <View>
+        <FlatList
+          data={data}
+          numColumns={2}
+          renderItem={({item}) => (
+            <Item title={item.title} image={item.image} id={item.id} />
+          )}
+          keyExtractor={item => item.id}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
