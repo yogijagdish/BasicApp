@@ -13,7 +13,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const useTemp = require('../Images/blank_picture.jpg');
 
+import {useSelector} from 'react-redux';
+
 export default function Dashboard({navigation}) {
+  const username = useSelector(state => state.data.username);
+  const title = useSelector(state => state.data.title);
+  const email = useSelector(state => state.data.email);
+  const mobile = useSelector(state => state.data.mobile);
+  const twitter = useSelector(state => state.data.twitter);
+
   const handlePress = () => {
     navigation.navigate('user');
   };
@@ -40,11 +48,8 @@ export default function Dashboard({navigation}) {
         </View>
         {/* username and title */}
         <View className="flex items-center mt-6">
-          <Text className="text-2xl text-white font-bold">
-            {' '}
-            No User Name Set{' '}
-          </Text>
-          <Text className="text-lg text-white"> no title set </Text>
+          <Text className="text-2xl text-white font-bold"> {username} </Text>
+          <Text className="text-lg text-white"> {title} </Text>
         </View>
         {/* followers and following */}
         <View className="flex flex-row mt-8">
@@ -65,17 +70,17 @@ export default function Dashboard({navigation}) {
       {/* white color view */}
       <View className="mt-8 ml-8">
         <Text className="text-lg"> Email </Text>
-        <Text className="text-xl text-black text-bold"> No Email Set </Text>
+        <Text className="text-xl text-black text-bold"> {email} </Text>
         <Pressable onPress={handlePress}>
           <View className="border-b-2 border-gray-400 w-80 h-14" />
         </Pressable>
         <Text className="text-lg mt-8"> Phone No </Text>
-        <Text className="text-xl text-black text-bold"> No Phone No Set </Text>
+        <Text className="text-xl text-black text-bold"> {mobile} </Text>
         <Pressable onPress={handlePress}>
           <View className="border-b-2 border-gray-400 w-80 h-14" />
         </Pressable>
         <Text className="text-lg mt-8"> Twitter </Text>
-        <Text className="text-xl text-black text-bold"> No Twitter Set </Text>
+        <Text className="text-xl text-black text-bold"> {twitter} </Text>
         <Pressable onPress={handlePress}>
           <View className="border-b-2 border-gray-400 w-80 h-14" />
         </Pressable>

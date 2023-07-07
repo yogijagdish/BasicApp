@@ -11,7 +11,18 @@ import {
 
 const tempImage = require('../Images/blank_picture.jpg');
 
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setUsername,
+  setTitle,
+  setMobile,
+  setEmail,
+  setTwitter,
+} from '../redux/features/userDataSlice';
+
 export default function EditDetail({navigation}) {
+  const dispatch = useDispatch();
+
   const [userData, setUserData] = useState({
     username: '',
     title: '',
@@ -20,12 +31,22 @@ export default function EditDetail({navigation}) {
     twitter: '',
   });
 
+  const username = useSelector(state => state.data.username);
+  const title = useSelector(state => state.data.title);
+  const email = useSelector(state => state.data.email);
+  const mobile = useSelector(state => state.data.mobile);
+  const twitter = useSelector(state => state.data.twitter);
+
   const handleInputChange = (key, value) => {
     setUserData({...userData, [key]: value});
   };
 
   const handleSubmit = () => {
-    console.log(userData);
+    dispatch(setUsername(userData.username));
+    dispatch(setTitle(userData.title));
+    dispatch(setEmail(userData.email));
+    dispatch(setMobile(userData.mobile));
+    dispatch(setTwitter(userData.twitter));
   };
 
   const handleProfileClick = () => {
@@ -43,27 +64,32 @@ export default function EditDetail({navigation}) {
         <Text className="font-bold text-md color-gray-400"> Username </Text>
         <TextInput
           className="border-2 w-64 h-10 mt-2 rounded-md border-gray-400"
+          placeholder={username}
           onChangeText={value => handleInputChange('username', value)}
         />
         <Text className="font-bold text-md color-gray-400 mt-4"> Title </Text>
         <TextInput
           className="border-2 w-64 h-10 mt-2 rounded-md border-gray-400"
+          placeholder={title}
           onChangeText={value => handleInputChange('title', value)}
         />
         <Text className="font-bold text-md color-gray-400 mt-4"> Email </Text>
         <TextInput
           className="border-2 w-64 h-10 mt-2 rounded-md border-gray-400"
+          placeholder={email}
           onChangeText={value => handleInputChange('email', value)}
         />
         <Text className="font-bold text-md color-gray-400 mt-4"> Mobile </Text>
         <TextInput
           className="border-2 w-64 h-10 mt-2 rounded-md border-gray-400"
+          placeholder={mobile}
           onChangeText={value => handleInputChange('mobile', value)}
         />
         <Text className="font-bold text-md color-gray-400 mt-4"> Twitter </Text>
         <TextInput
           className="border-2 w-64 h-10 mt-2 rounded-md border-gray-400"
-          onChangeText={value => handleInputChange('twitte', value)}
+          placeholder={twitter}
+          onChangeText={value => handleInputChange('twitter', value)}
         />
         <TouchableOpacity
           className="h-10 w-64 bg-blue-600 rounded-lg mt-6"
