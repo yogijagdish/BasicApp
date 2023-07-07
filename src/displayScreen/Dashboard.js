@@ -33,8 +33,15 @@ export default function Dashboard({navigation}) {
         {' '}
         {title}
       </Text>
-      <TouchableOpacity onPress={() => console.log(`${id}`)}>
-        <Text className="font-extrabold mt-2 text-blue-600 text-center"> View Item </Text>
+      <TouchableOpacity
+        onPress={() => {
+          // console.log(`${id}`);
+          navigation.navigate('item-screen', {id: `${id}`});
+        }}>
+        <Text className="font-extrabold mt-2 text-blue-600 text-center">
+          {' '}
+          View Item{' '}
+        </Text>
       </TouchableOpacity>
     </View>
   );

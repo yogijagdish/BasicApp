@@ -13,8 +13,18 @@ export const apiHandle = createApi({
         };
       },
     }),
+    // get for individual items
+    individualProductDisplayAPI: builder.query({
+      query: id => {
+        return {
+          url: `products/${id}`,
+          method: 'GET',
+        };
+      },
+    }),
     // next api
   }),
 });
 
-export const {useProductDisplayAPIQuery} = apiHandle;
+export const {useProductDisplayAPIQuery, useIndividualProductDisplayAPIQuery} =
+  apiHandle;
