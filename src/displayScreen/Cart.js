@@ -15,10 +15,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {useIndividualProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {unSetItemToCart} from '../redux/features/cartSlice';
 
 export default function Cart({navigation}) {
   const DATA = [];
+
+  const dispatch = useDispatch();
 
   const cartItem = useSelector(state => state.addToCart.id);
 
@@ -33,9 +36,17 @@ export default function Cart({navigation}) {
     console.log(DATA);
   });
 
+  const handleRemoveFromCart = id => {
+    console.log(cartItem);
+    const index = cartItem.indexOf(`${id}`);
+    console.log(index);
+    dispatch(unSetItemToCart(index));
+    navigation.navigate('bottom-tab');
+  };
+
   // eslint-disable-next-line react/no-unstable-nested-components
-  const Item = ({title, description, image, price}) => (
-    <View className="flex flex-row pl-2 pt-6 pb-6 mt-4">
+  const Item = ({title, description, price, id}) => (
+    <View className="flex flex-row pl-2 pt-6 pb-6 mt-2">
       <View className="w-56">
         <Text className="font-extrabold text-lg text-black"> {title} </Text>
         <Text numberOfLines={2} className="text-black mt-2">
@@ -45,7 +56,7 @@ export default function Cart({navigation}) {
         <Text className="font-bold text-black mt-2"> Price: Rs {price} </Text>
         <TouchableOpacity
           className="h-10 rounded-xl bg-blue-500 mt-4"
-          onPress={() => console.log('pressed')}>
+          onPress={() => console.log('buy')}>
           <Text className="text-lg text-center text-black font-bold mt-1">
             {' '}
             Buy Now{' '}
@@ -53,7 +64,7 @@ export default function Cart({navigation}) {
         </TouchableOpacity>
         <TouchableOpacity
           className="h-10 rounded-xl bg-red-500 mt-2"
-          onPress={() => console.log('removed')}>
+          onPress={() => handleRemoveFromCart(id)}>
           <Text className="text-black text-center font-bold text-lg mt-1">
             {' '}
             Remove From Cart
@@ -61,7 +72,9 @@ export default function Cart({navigation}) {
         </TouchableOpacity>
       </View>
       <Image
-        source={{uri: `${image}`}}
+        source={{
+          uri: `https://i.dummyjson.com/data/products/${id}/thumbnail.jpg`,
+        }}
         className="h-52 w-32 ml-6"
         resizeMode="contain"
       />
@@ -71,7 +84,7 @@ export default function Cart({navigation}) {
   return (
     <SafeAreaView>
       <Text> {listCart} </Text>
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between mb-4">
         {/* for arrow and name */}
         <View className="flex flex-row ml-6">
           <Pressable onPress={() => navigation.goBack()}>
@@ -91,7 +104,7 @@ export default function Cart({navigation}) {
             title={item.title}
             description={item.description}
             price={item.price}
-            image={item.image}
+            id={item.id}
           />
         )}
         keyExtractor={item => item.id}

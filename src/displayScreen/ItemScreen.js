@@ -28,10 +28,17 @@ export default function ItemScreen({route, navigation}) {
   const {data, isSuccess} = useIndividualProductDisplayAPIQuery(id);
 
   const [item, setItem] = useState({});
+  const [image, setImage] = useState([]);
+
+  const [duplicateItem, setDuplicateItem] = useState('');
 
   const handleAddToCart = () => {
-    dispatch(setItemToCart(id));
-    console.log('Add to cart');
+    const unique_item = cartItem.includes(id);
+    if (!unique_item) {
+      dispatch(setItemToCart(id));
+    } else {
+      setDuplicateItem('This Item already exists');
+    }
   };
 
   useEffect(() => {
@@ -40,6 +47,31 @@ export default function ItemScreen({route, navigation}) {
       console.log(data);
     }
   }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setImage(data.images);
+      console.log(image);
+    }
+  }, [data, image, isSuccess]);
+
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const DisplayImages = () => (
+    <View className="flex flex-row gap-2">
+      {image.map((item, index) => (
+        <TouchableOpacity>
+          <Image
+            key={index}
+            source={{
+              uri: `${item}`,
+            }}
+            className="h-16 w-16 ml-4"
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   return (
     <SafeAreaView>
@@ -65,22 +97,30 @@ export default function ItemScreen({route, navigation}) {
         {/* Image */}
         <Image
           source={{
-            uri: `${item.image}`,
+            uri: `https://i.dummyjson.com/data/products/${id}/thumbnail.jpg`,
           }}
           className="h-80 w-full"
           resizeMode="contain"
         />
+        <DisplayImages />
         {/* title and description */}
-        <View className="ml-4 mt-4">
+        <View className="ml-4">
           <Text className="text-lg font-extrabold text-bold text-black">
             {' '}
             {item.title}
           </Text>
-          <Text className="text-black font-bold mt-2">
+
+          <Text className="text-black mt-2">{item.description}</Text>
+        </View>
+        <View className="flex mt-4 ml-4 ">
+          <Text className="text-black font-bold text-lg">
             {' '}
             Price: Rs {item.price}{' '}
           </Text>
-          <Text className="text-black mt-2">{item.description}</Text>
+          <Text className="text-black font-bold text-lg">
+            {' '}
+            Discount: {item.discountPercentage} %
+          </Text>
         </View>
 
         {/* ratings */}
@@ -88,11 +128,15 @@ export default function ItemScreen({route, navigation}) {
         <View className="flex flex-row mt-4 justify-center">
           <Text className="border-r-2 w-32 text-black">
             {' '}
-            Rating: {item?.rating?.rate}{' '}
+            Rating: {item.rating}{' '}
           </Text>
-          <Text className="text-black w-32 text-center">
+          {/* <Text className="text-black w-32 text-center">
             {' '}
             Count: {item?.rating?.count}
+          </Text> */}
+          <Text className="text-black w-32 text-center">
+            {' '}
+            Stock: {item.stock}
           </Text>
         </View>
 
@@ -107,6 +151,10 @@ export default function ItemScreen({route, navigation}) {
             <Text className="text-center text-md mt-1"> Buy Now </Text>
           </TouchableOpacity>
         </View>
+        <Text className="text-red-700 mt-4 ml-4 font-bold text-lg">
+          {' '}
+          {duplicateItem}{' '}
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );

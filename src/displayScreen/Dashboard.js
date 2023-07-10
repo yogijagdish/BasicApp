@@ -23,10 +23,12 @@ export default function Dashboard({navigation}) {
   console.log(data);
 
   // eslint-disable-next-line react/no-unstable-nested-components
-  const Item = ({title, image, id}) => (
+  const Item = ({title, id}) => (
     <View className="h-52 w-44 mt-6 ml-3 mr-2 rounded-xl">
       <Image
-        source={{uri: `${image}`}}
+        source={{
+          uri: `https://i.dummyjson.com/data/products/${id}/thumbnail.jpg`,
+        }}
         className="h-32 w-40"
         resizeMode="contain"
       />
@@ -58,7 +60,9 @@ export default function Dashboard({navigation}) {
         </View>
         <View className="flex flex-row pr-4 gap-6 pt-2">
           <Ionicons name="notifications" color="black" size={30} />
-          <MaterialIcons name="shopping-bag" color="black" size={30} />
+          <TouchableOpacity onPress={() => navigation.navigate('cart')}>
+            <MaterialIcons name="shopping-bag" color="black" size={30} />
+          </TouchableOpacity>
         </View>
       </View>
       {/* search bar */}
@@ -72,11 +76,9 @@ export default function Dashboard({navigation}) {
       </View>
       <View>
         <FlatList
-          data={data}
+          data={data.products}
           numColumns={2}
-          renderItem={({item}) => (
-            <Item title={item.title} image={item.image} id={item.id} />
-          )}
+          renderItem={({item}) => <Item title={item.title} id={item.id} />}
           keyExtractor={item => item.id}
         />
       </View>

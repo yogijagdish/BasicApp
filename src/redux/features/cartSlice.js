@@ -11,9 +11,12 @@ const cartSlice = createSlice({
     setItemToCart(state, action) {
       state.id.push(action.payload);
     },
+    unSetItemToCart(state, action) {
+      state.id.splice(action.payload, 1);
+    },
   },
 });
 
-export const {setItemToCart} = cartSlice.actions;
+export const {setItemToCart, unSetItemToCart} = cartSlice.actions;
 
 export default cartSlice.reducer;
