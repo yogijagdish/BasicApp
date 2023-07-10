@@ -20,6 +20,8 @@ import {useProductDisplayAPIQuery} from '../redux/services/apiHandle';
 export default function Dashboard({navigation}) {
   const {data, isSuccess} = useProductDisplayAPIQuery();
 
+  console.log(data);
+
   // eslint-disable-next-line react/no-unstable-nested-components
   const Item = ({title, image, id}) => (
     <View className="h-52 w-44 mt-6 ml-3 mr-2 rounded-xl">

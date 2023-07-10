@@ -14,13 +14,25 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {useIndividualProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {setItemToCart} from '../redux/features/cartSlice';
+
 export default function ItemScreen({route, navigation}) {
+  const dispatch = useDispatch();
+
+  const cartItem = useSelector(state => state.addToCart.id);
+
   const {id} = route.params;
   //   console.log(id);
 
   const {data, isSuccess} = useIndividualProductDisplayAPIQuery(id);
 
   const [item, setItem] = useState({});
+
+  const handleAddToCart = () => {
+    dispatch(setItemToCart(id));
+    console.log('Add to cart');
+  };
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -44,7 +56,10 @@ export default function ItemScreen({route, navigation}) {
             </Text>
           </View>
           <Pressable onPress={() => navigation.navigate('cart')}>
-            <Text className="text-lg text-black"> Cart: 0 </Text>
+            <Text className="text-lg text-black">
+              {' '}
+              Cart: {cartItem.length}{' '}
+            </Text>
           </Pressable>
         </View>
         {/* Image */}
@@ -83,7 +98,9 @@ export default function ItemScreen({route, navigation}) {
 
         {/* buttons */}
         <View className="flex flex-row justify-around mt-6">
-          <TouchableOpacity className="w-32 h-8 bg-yellow-400 rounded-lg">
+          <TouchableOpacity
+            className="w-32 h-8 bg-yellow-400 rounded-lg"
+            onPress={handleAddToCart}>
             <Text className="text-center text-md mt-1"> Add To Cart </Text>
           </TouchableOpacity>
           <TouchableOpacity className="w-32 h-8 bg-blue-400 rounded-lg">
