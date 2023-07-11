@@ -15,6 +15,7 @@ export default function BottomTab() {
   return (
     <bottomTab.Navigator>
       <bottomTab.Group screenOptions={{headerShown: false}}>
+        {/* dashboard */}
         <bottomTab.Screen
           name="dashboard"
           component={Dashboard}
@@ -27,6 +28,7 @@ export default function BottomTab() {
             tabBarInactiveTintColor: 'black',
           }}
         />
+        {/* search product */}
         <bottomTab.Screen
           name="search-product"
           component={SearchProduct}
@@ -37,6 +39,7 @@ export default function BottomTab() {
             },
           }}
         />
+        {/* user */}
         <bottomTab.Screen
           name="user"
           component={User}

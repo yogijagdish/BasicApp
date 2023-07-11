@@ -25,14 +25,19 @@ export default function Main() {
     <NavigationContainer>
       <nativeStack.Navigator>
         <nativeStack.Group screenOptions={{headerShown: false}}>
+          {/* signin */}
           <nativeStack.Screen name="signin" component={Signin} />
+          {/* signup */}
           <nativeStack.Screen name="signup" component={Signup} />
+          {/* forget password */}
           <nativeStack.Screen
             name="forget-password"
             component={Forgetpassword}
           />
+          {/* bottom tab or dashboard */}
           <nativeStack.Screen name="bottom-tab" component={BottomTab} />
         </nativeStack.Group>
+        {/* edit details */}
         <nativeStack.Screen
           name="edit-detail"
           component={EditDetail}
@@ -42,22 +47,25 @@ export default function Main() {
             headerTitleAlign: 'center',
           }}
         />
+        {/* permissions */}
         <nativeStack.Screen
           name="permission"
           component={PermissionScreen}
           options={{presentation: 'modal', headerShown: false}}
         />
-
+        {/* item screen */}
         <nativeStack.Screen
           name="item-screen"
           component={ItemScreen}
           options={{presentation: 'modal', headerShown: false}}
         />
+        {/* cart */}
         <nativeStack.Screen
           name="cart"
           component={Cart}
           options={{presentation: 'modal', headerShown: false}}
         />
+        {/* buynow */}
         <nativeStack.Screen
           name="buy-now"
           component={BuyNow}
