@@ -10,6 +10,7 @@ import EditDetail from './src/displayScreen/EditDetail';
 import PermissionScreen from './src/displayScreen/PermissionScreen';
 import ItemScreen from './src/displayScreen/ItemScreen';
 import Cart from './src/displayScreen/Cart';
+import BuyNow from './src/displayScreen/BuyNow';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -55,6 +56,11 @@ export default function Main() {
         <nativeStack.Screen
           name="cart"
           component={Cart}
+          options={{presentation: 'modal', headerShown: false}}
+        />
+        <nativeStack.Screen
+          name="buy-now"
+          component={BuyNow}
           options={{presentation: 'modal', headerShown: false}}
         />
       </nativeStack.Navigator>

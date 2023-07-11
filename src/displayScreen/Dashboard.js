@@ -1,5 +1,7 @@
+// importing from react
 import React from 'react';
 
+// importing necessary libraries from react-native
 import {
   Text,
   View,
@@ -9,18 +11,25 @@ import {
   FlatList,
   SafeAreaView,
   ActivityIndicator,
+  Button,
+  ScrollView,
 } from 'react-native';
 
+// importing icons from react-native-vector-icons
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
+// calling the api hook from reduc api handle
 import {useProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
+// main function
 export default function Dashboard({navigation}) {
+  // making the api call
   const {data, isLoading, isSuccess} = useProductDisplayAPIQuery();
 
+  // renders the all the products in Flatlist
   // eslint-disable-next-line react/no-unstable-nested-components
   const Item = ({title, price, id}) => (
     <View className="h-52 w-44 mt-6 ml-3 mr-2 rounded-xl">
@@ -28,7 +37,7 @@ export default function Dashboard({navigation}) {
         source={{
           uri: `https://i.dummyjson.com/data/products/${id}/thumbnail.jpg`,
         }}
-        className="h-32 w-40"
+        className="h-32 w-40 rounded-2xl"
         resizeMode="contain"
       />
       <Text className="font-bold text-md"> {title}</Text>
@@ -38,21 +47,27 @@ export default function Dashboard({navigation}) {
           // console.log(`${id}`);
           navigation.navigate('item-screen', {id: `${id}`});
         }}>
-        <Text className="font-extrabold mt-2 text-blue-600 text-center">
+        <Text
+          className="font-extrabold mt-2 text-center"
+          style={{color: '#FA8E00'}}>
           {' '}
           View Item{' '}
         </Text>
       </TouchableOpacity>
     </View>
   );
+
   return (
     // main container view
     <SafeAreaView>
       {/* for home and menu , notification and shopping icons */}
       <View className="flex flex-row justify-between">
         <View className="flex flex-row gap-6 pl-4 pt-2">
-          <Entypo name="menu" color="black" size={30} className="ml-4" />
-          <Text className="text-lg font-bold text-black"> Home </Text>
+          <Entypo name="menu" size={30} className="ml-4" />
+          <Text selectable className="text-lg font-bold">
+            {' '}
+            Home{' '}
+          </Text>
         </View>
         <View className="flex flex-row pr-4 gap-6 pt-2">
           <Ionicons name="notifications" color="black" size={30} />
@@ -61,17 +76,31 @@ export default function Dashboard({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
+      {/* displaying our products */}
+      <View className="p-8">
+        <Text className="text-2xl text-black"> Our</Text>
+        <Text
+          className="font-bold text-3xl text-black"
+          style={{color: '#FA8E00'}}>
+          {' '}
+          Products{' '}
+        </Text>
+      </View>
       {/* search bar */}
       <View className="flex items-center mt-4">
-        <View className="flex flex-row border-2 border-gray-500 h-10 rounded-lg">
-          <TextInput className="w-72" placeholder="What are you looking for?" />
-          <TouchableOpacity className="mt-1">
+        <View
+          className="flex flex-row h-10 rounded-lg"
+          style={{backgroundColor: '#d1d5db'}}>
+          <TextInput className="w-72 p-2" placeholder="Search Products" />
+          <TouchableOpacity className="mt-2">
             <EvilIcons name="search" color="gray" size={30} />
           </TouchableOpacity>
         </View>
+
+        {/* in api call if isSuccess is true it renders this part of the code */}
       </View>
       {isSuccess && (
-        <View>
+        <ScrollView>
           <FlatList
             data={data.products}
             numColumns={2}
@@ -80,8 +109,14 @@ export default function Dashboard({navigation}) {
             )}
             keyExtractor={item => item.id}
           />
-        </View>
+          <Button
+            title="Load More"
+            onPress={() => console.log('loading more')}
+            className="text-black mb-8"
+          />
+        </ScrollView>
       )}
+      {/* if isLoading is true it renders this part of the code */}
       {isLoading && (
         <View className="flex justify-center items-center h-screen">
           <ActivityIndicator size="large" color="#000000" />

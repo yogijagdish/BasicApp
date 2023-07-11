@@ -166,7 +166,9 @@ export default function ItemScreen({route, navigation}) {
               onPress={handleAddToCart}>
               <Text className="text-center text-md mt-1"> Add To Cart </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="w-32 h-8 bg-blue-400 rounded-lg">
+            <TouchableOpacity
+              className="w-32 h-8 bg-blue-400 rounded-lg"
+              onPress={() => navigation.navigate('buy-now')}>
               <Text className="text-center text-md mt-1"> Buy Now </Text>
             </TouchableOpacity>
           </View>
