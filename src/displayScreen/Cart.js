@@ -26,11 +26,11 @@ export default function Cart({navigation}) {
   const cartItem = useSelector(state => state.addToCart.id);
 
   const listCart = cartItem.map(number => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const {data, isSuccess} = useIndividualProductDisplayAPIQuery(number);
-    while (!isSuccess) {
+    const {data, isSuccess, isLoading} =
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const {isSuccess} = useIndividualProductDisplayAPIQuery(0);
+      useIndividualProductDisplayAPIQuery(number);
+    while (isLoading) {
+      console.log('loading');
     }
     DATA.push(data);
     console.log(DATA);

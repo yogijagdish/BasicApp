@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -18,12 +19,10 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {useProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
 export default function Dashboard({navigation}) {
-  const {data, isSuccess} = useProductDisplayAPIQuery();
-
-  console.log(data);
+  const {data, isLoading, isSuccess} = useProductDisplayAPIQuery();
 
   // eslint-disable-next-line react/no-unstable-nested-components
-  const Item = ({title, id}) => (
+  const Item = ({title, price, id}) => (
     <View className="h-52 w-44 mt-6 ml-3 mr-2 rounded-xl">
       <Image
         source={{
@@ -32,10 +31,8 @@ export default function Dashboard({navigation}) {
         className="h-32 w-40"
         resizeMode="contain"
       />
-      <Text numberOfLines={2} className="font-bold text-md mt-2">
-        {' '}
-        {title}
-      </Text>
+      <Text className="font-bold text-md"> {title}</Text>
+      <Text className="font-bold text-md mt-1"> Price: Rs. {price}</Text>
       <TouchableOpacity
         onPress={() => {
           // console.log(`${id}`);
@@ -48,7 +45,6 @@ export default function Dashboard({navigation}) {
       </TouchableOpacity>
     </View>
   );
-
   return (
     // main container view
     <SafeAreaView>
@@ -74,14 +70,23 @@ export default function Dashboard({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <FlatList
-          data={data.products}
-          numColumns={2}
-          renderItem={({item}) => <Item title={item.title} id={item.id} />}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      {isSuccess && (
+        <View>
+          <FlatList
+            data={data.products}
+            numColumns={2}
+            renderItem={({item}) => (
+              <Item title={item.title} price={item.price} id={item.id} />
+            )}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      )}
+      {isLoading && (
+        <View className="flex justify-center items-center h-screen">
+          <ActivityIndicator size="large" color="#000000" />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
