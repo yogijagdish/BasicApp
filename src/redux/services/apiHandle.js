@@ -6,9 +6,9 @@ export const apiHandle = createApi({
   endpoints: builder => ({
     // get api
     productDisplayAPI: builder.query({
-      query: () => {
+      query: num => {
         return {
-          url: 'products/',
+          url: `products?limit=${num}&skip=3`,
           method: 'GET',
         };
       },
@@ -31,7 +31,7 @@ export const apiHandle = createApi({
         };
       },
     }),
-    // next apicts
+    // get items by category
     getIndividualCategoriesAPI: builder.query({
       query: category => {
         return {
@@ -40,6 +40,16 @@ export const apiHandle = createApi({
         };
       },
     }),
+    // searching item
+    searchItemAPI: builder.query({
+      query: searchItem => {
+        return {
+          url: `products/search?q=${searchItem}`,
+          method: 'GET',
+        };
+      },
+    }),
+    // next api
   }),
 });
 
@@ -48,4 +58,5 @@ export const {
   useIndividualProductDisplayAPIQuery,
   useGetCategoriesAPIQuery,
   useGetIndividualCategoriesAPIQuery,
+  useSearchItemAPIQuery,
 } = apiHandle;

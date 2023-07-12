@@ -24,10 +24,15 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 // calling the api hook from reduc api handle
 import {useProductDisplayAPIQuery} from '../redux/services/apiHandle';
 
+import {useSelector, useDispatch} from 'react-redux';
+import {setDataLoad} from '../redux/features/dataSlice';
+
 // main function
 export default function Dashboard({navigation}) {
+  const num = useSelector(state => state.loadMoreData.number);
+
   // making the api call
-  const {data, isLoading, isSuccess} = useProductDisplayAPIQuery();
+  const {data, isLoading, isSuccess} = useProductDisplayAPIQuery(num);
 
   // renders the all the products in Flatlist
   // eslint-disable-next-line react/no-unstable-nested-components
@@ -57,65 +62,76 @@ export default function Dashboard({navigation}) {
     </View>
   );
 
+  const dispatch = useDispatch();
+
+  const handleLoadMore = () => {
+    dispatch(setDataLoad());
+  };
+
   return (
     // main container view
     <SafeAreaView>
-      {/* for home and menu , notification and shopping icons */}
-      <View className="flex flex-row justify-between">
-        <View className="flex flex-row gap-6 pl-4 pt-2">
-          <Entypo name="menu" size={30} className="ml-4" />
-          <Text selectable className="text-lg font-bold">
+      <ScrollView>
+        {/* for home and menu , notification and shopping icons */}
+
+        <View className="flex flex-row justify-between">
+          <View className="flex flex-row gap-6 pl-4 pt-2">
+            <Entypo name="menu" size={30} className="ml-4" />
+            <Text selectable className="text-lg font-bold">
+              {' '}
+              Home{' '}
+            </Text>
+          </View>
+          <View className="flex flex-row pr-4 gap-6 pt-2">
+            <Ionicons name="notifications" color="black" size={30} />
+            <TouchableOpacity onPress={() => navigation.navigate('cart')}>
+              <MaterialIcons name="shopping-bag" color="black" size={30} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* displaying our products */}
+        <View className="p-4">
+          <Text className="text-2xl text-black"> Our</Text>
+          <Text
+            className="font-bold text-3xl text-black"
+            style={{color: '#FA8E00'}}>
             {' '}
-            Home{' '}
+            Products{' '}
           </Text>
         </View>
-        <View className="flex flex-row pr-4 gap-6 pt-2">
-          <Ionicons name="notifications" color="black" size={30} />
-          <TouchableOpacity onPress={() => navigation.navigate('cart')}>
-            <MaterialIcons name="shopping-bag" color="black" size={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* displaying our products */}
-      <View className="p-8">
-        <Text className="text-2xl text-black"> Our</Text>
-        <Text
-          className="font-bold text-3xl text-black"
-          style={{color: '#FA8E00'}}>
-          {' '}
-          Products{' '}
-        </Text>
-      </View>
-      {/* search bar */}
-      <View className="flex items-center mt-4">
-        <View
-          className="flex flex-row h-10 rounded-lg"
-          style={{backgroundColor: '#d1d5db'}}>
-          <TextInput className="w-72 p-2" placeholder="Search Products" />
-          <TouchableOpacity className="mt-2">
-            <EvilIcons name="search" color="gray" size={30} />
-          </TouchableOpacity>
-        </View>
+        {/* search bar */}
+        <View className="flex items-center mb-4">
+          <View
+            className="flex flex-row h-10 rounded-lg"
+            style={{backgroundColor: '#d1d5db'}}>
+            <TextInput className="w-72 p-2" placeholder="Search Products" />
+            <TouchableOpacity className="mt-2">
+              <EvilIcons name="search" color="gray" size={30} />
+            </TouchableOpacity>
+          </View>
 
-        {/* in api call if isSuccess is true it renders this part of the code */}
-      </View>
-      {isSuccess && (
-        <SafeAreaView>
-          <FlatList
-            data={data.products}
-            numColumns={2}
-            renderItem={({item}) => (
-              <Item title={item.title} price={item.price} id={item.id} />
-            )}
-            keyExtractor={item => item.id}
-          />
-          <Button
-            title="Load More"
-            onPress={() => console.log('loading more')}
-            className="text-black mb-8"
-          />
-        </SafeAreaView>
-      )}
+          {/* in api call if isSuccess is true it renders this part of the code */}
+        </View>
+        {isSuccess && (
+          <SafeAreaView>
+            <FlatList
+              data={data.products}
+              numColumns={2}
+              renderItem={({item}) => (
+                <Item title={item.title} price={item.price} id={item.id} />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </SafeAreaView>
+        )}
+        <TouchableOpacity
+          className="flex items-center mt-4 mb-4"
+          onPress={handleLoadMore}>
+          <View className="w-72 p-2 rounded-2xl bg-textColor">
+            <Text className="text-center text-bold text-lg"> Load More </Text>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
       {/* if isLoading is true it renders this part of the code */}
       {isLoading && (
         <View className="flex justify-center items-center h-screen">

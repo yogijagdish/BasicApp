@@ -11,41 +11,44 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 
 // importing api from redux/services
 import {useGetCategoriesAPIQuery} from '../redux/services/apiHandle';
 import {useGetIndividualCategoriesAPIQuery} from '../redux/services/apiHandle';
+import {useSearchItemAPIQuery} from '../redux/services/apiHandle';
+
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 // main function
 export default function SearchProduct() {
   // local state to keep track of what catogary of item is selected
   const [category, setCategory] = useState('');
-
+  const [searchItem, setSearchItem] = useState('');
   // making api calls
   const categoriesList = useGetCategoriesAPIQuery();
   const individualCategoriesList = useGetIndividualCategoriesAPIQuery(category);
+  const searchingProduct = useSearchItemAPIQuery(searchItem);
 
   // fires when any catogery is clicked
   const handleCategoriesPress = ({item}) => {
     setCategory(item);
-    console.log(category);
-    console.log(individualCategoriesList.data);
   };
 
   // displays the category of items at top
   // eslint-disable-next-line react/no-unstable-nested-components
   const Categories = ({item, index}) => (
     <TouchableOpacity
-      className="p-4 rounded-2xl ml-4 mt-4"
+      className="p-4 rounded-2xl ml-4"
       // eslint-disable-next-line react-native/no-inline-styles
       style={{backgroundColor: '#FA8E00'}}
       onPress={() => handleCategoriesPress({item})}>
-      <Text> {item} </Text>
+      <Text className="font-bold"> {item} </Text>
     </TouchableOpacity>
   );
 
-  // displays the list of items in the category 
+  // displays the list of items in the category
   // eslint-disable-next-line react/no-unstable-nested-components
   const IndividualCategories = ({title, price, id, image}) => (
     <SafeAreaView>
@@ -68,12 +71,21 @@ export default function SearchProduct() {
     <SafeAreaView>
       <ScrollView>
         {/* search product text */}
-        <View className="p-8">
+        <View className="p-6">
           <Text className="text-2xl text-black">Search</Text>
           <Text className="text-3xl font-bold" style={{color: '#FA8E00'}}>
             {' '}
             Products{' '}
           </Text>
+          {/* Searching bar */}
+          <View className="flex flex-row justify-center">
+            <TextInput
+              className="border-2 h-10 w-80 mt-4"
+              onChangeText={setSearchItem}
+              value={searchItem}
+              placeholder="Search Products Here . . ."
+            />
+          </View>
         </View>
         {/* display categories list */}
         {categoriesList.isSuccess && (
@@ -106,6 +118,24 @@ export default function SearchProduct() {
               )}
               keyExtractor={item => item.id}
             />
+          </SafeAreaView>
+        )}
+        {searchingProduct.isSuccess && (
+          <SafeAreaView>
+            <ScrollView>
+              <FlatList
+                data={searchingProduct.data.products}
+                renderItem={({item}) => (
+                  <IndividualCategories
+                    title={item.title}
+                    price={item.price}
+                    id={item.id}
+                    image={item.thumbnail}
+                  />
+                )}
+                keyExtractor={item => item.id}
+              />
+            </ScrollView>
           </SafeAreaView>
         )}
       </ScrollView>
