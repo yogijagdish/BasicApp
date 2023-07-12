@@ -100,7 +100,7 @@ export default function Dashboard({navigation}) {
         {/* in api call if isSuccess is true it renders this part of the code */}
       </View>
       {isSuccess && (
-        <ScrollView>
+        <SafeAreaView>
           <FlatList
             data={data.products}
             numColumns={2}
@@ -114,7 +114,7 @@ export default function Dashboard({navigation}) {
             onPress={() => console.log('loading more')}
             className="text-black mb-8"
           />
-        </ScrollView>
+        </SafeAreaView>
       )}
       {/* if isLoading is true it renders this part of the code */}
       {isLoading && (

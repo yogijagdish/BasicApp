@@ -1,191 +1,113 @@
-import React from 'react';
+// import necessary hook from react
+import React, {useState} from 'react';
 
+// import necessary component from react-native
 import {
   Text,
   View,
   SafeAreaView,
   ScrollView,
   Image,
-  Button,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
+// importing api from redux/services
+import {useGetCategoriesAPIQuery} from '../redux/services/apiHandle';
+import {useGetIndividualCategoriesAPIQuery} from '../redux/services/apiHandle';
+
+// main function
 export default function SearchProduct() {
+  // local state to keep track of what catogary of item is selected
+  const [category, setCategory] = useState('');
+
+  // making api calls
+  const categoriesList = useGetCategoriesAPIQuery();
+  const individualCategoriesList = useGetIndividualCategoriesAPIQuery(category);
+
+  // fires when any catogery is clicked
+  const handleCategoriesPress = ({item}) => {
+    setCategory(item);
+    console.log(category);
+    console.log(individualCategoriesList.data);
+  };
+
+  // displays the category of items at top
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const Categories = ({item, index}) => (
+    <TouchableOpacity
+      className="p-4 rounded-2xl ml-4 mt-4"
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{backgroundColor: '#FA8E00'}}
+      onPress={() => handleCategoriesPress({item})}>
+      <Text> {item} </Text>
+    </TouchableOpacity>
+  );
+
+  // displays the list of items in the category 
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const IndividualCategories = ({title, price, id, image}) => (
+    <SafeAreaView>
+      <ScrollView className="p-8">
+        <Image
+          source={{
+            uri: `${image}`,
+          }}
+          className="h-32 w-full"
+          resizeMode="contain"
+        />
+        <Text className="font-bold text-xl text-center mt-4"> {title} </Text>
+        <Text className="text-lg text-center mt-2"> Price: Rs {price} </Text>
+      </ScrollView>
+    </SafeAreaView>
+  );
+
+  // main return
   return (
     <SafeAreaView>
       <ScrollView>
+        {/* search product text */}
         <View className="p-8">
-          <Text className="text-2xl text-black"> Search</Text>
+          <Text className="text-2xl text-black">Search</Text>
           <Text className="text-3xl font-bold" style={{color: '#FA8E00'}}>
             {' '}
             Products{' '}
           </Text>
         </View>
-        <Text className="text-xl ml-2 text-black"> Categories </Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          className="flex gap-2 pl-2 mt-2">
-          {/* view 1 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/2/1.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
+        {/* display categories list */}
+        {categoriesList.isSuccess && (
+          <SafeAreaView>
+            <FlatList
+              data={categoriesList.data}
+              renderItem={({item, index}) => (
+                <Categories item={item} index={index} />
+              )}
+              keyExtractor={item => item}
+              horizontal
+              showsHorizontalScrollIndicator={false}
             />
-            <Text className="text-black mt-2 ml-2"> SmartPhones</Text>
-          </View>
-          {/* view 2 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/7/1.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
+          </SafeAreaView>
+        )}
+        {/* while category is loading displays loading signal */}
+        {categoriesList.isLoading && <ActivityIndicator size="large" />}
+        {/* displays the list of individual category */}
+        {individualCategoriesList.isSuccess && (
+          <SafeAreaView>
+            <FlatList
+              data={individualCategoriesList.data.products}
+              renderItem={({item}) => (
+                <IndividualCategories
+                  title={item.title}
+                  price={item.price}
+                  id={item.id}
+                  image={item.thumbnail}
+                />
+              )}
+              keyExtractor={item => item.id}
             />
-            <Text className="text-black mt-2 ml-2"> Laptops</Text>
-          </View>
-          {/* view 3 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/13/1.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
-            />
-            <Text className="text-black mt-2 ml-2"> Fragnance </Text>
-          </View>
-          {/* view 4 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/16/3.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
-            />
-            <Text className="text-black mt-2 ml-2"> SkinCare </Text>
-          </View>
-          {/* view 5 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/21/2.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
-            />
-            <Text className="text-black mt-2 ml-2"> Groceries </Text>
-          </View>
-          {/* view 5 */}
-          <View
-            className="flex flex-row w-36 h-10 rounded-2xl"
-            style={{backgroundColor: '#FA8E00'}}>
-            <Image
-              source={{uri: 'https://i.dummyjson.com/data/products/26/1.jpg'}}
-              className="h-8 w-8 rounded-full mt-1 ml-1"
-              resizeMode="contain"
-            />
-            <Text className="text-black mt-2 ml-2"> Home Decoration </Text>
-          </View>
-        </ScrollView>
-        <View className="mt-6">
-          <Text className="text-black text-lg"> Smart Phones</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="flex mt-6 ml-2 ">
-            {/* view 1 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/2/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Iphone 9
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-            {/* view 3 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/5/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Samsung Universe 9
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-            {/* view 2 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/4/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Iphone X
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-          </ScrollView>
-        </View>
-        <View className="mt-6">
-          <Text className="text-black text-lg"> Laptops </Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="flex mt-6 ml-2 ">
-            {/* view 1 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/6/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Samsung Galaxy Book
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-            {/* view 3 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/7/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Microsoft Surface Laptop 4
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-            {/* view 2 */}
-            <View>
-              <Image
-                source={{uri: 'https://i.dummyjson.com/data/products/8/2.jpg'}}
-                className="h-24 w-52"
-                resizeMode="contain"
-              />
-              <Text className="p-2 text-black text-lg font-bold">
-                {' '}
-                Infinix INBOOK
-              </Text>
-              <Text className="p-2 font-bold text-black"> Rs: 199 </Text>
-            </View>
-          </ScrollView>
-        </View>
+          </SafeAreaView>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -22,9 +22,30 @@ export const apiHandle = createApi({
         };
       },
     }),
-    // next api
+    // api for getting categories
+    getCategoriesAPI: builder.query({
+      query: () => {
+        return {
+          url: 'products/categories/',
+          method: 'GET',
+        };
+      },
+    }),
+    // next apicts
+    getIndividualCategoriesAPI: builder.query({
+      query: category => {
+        return {
+          url: `products/category/${category}/`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
 });
 
-export const {useProductDisplayAPIQuery, useIndividualProductDisplayAPIQuery} =
-  apiHandle;
+export const {
+  useProductDisplayAPIQuery,
+  useIndividualProductDisplayAPIQuery,
+  useGetCategoriesAPIQuery,
+  useGetIndividualCategoriesAPIQuery,
+} = apiHandle;
