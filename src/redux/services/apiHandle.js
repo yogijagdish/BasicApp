@@ -8,7 +8,7 @@ export const apiHandle = createApi({
     productDisplayAPI: builder.query({
       query: num => {
         return {
-          url: `products?limit=${num}&skip=3`,
+          url: `products?limit=${num}&skip=4`,
           method: 'GET',
         };
       },
@@ -49,7 +49,27 @@ export const apiHandle = createApi({
         };
       },
     }),
-    // next api
+    // update api
+    updateItemAPI: builder.mutation({
+      query: id => {
+        return {
+          url: `products/${id}`,
+          method: 'PUT',
+          headers: {
+            'content-type': 'application/json',
+          },
+        };
+      },
+    }),
+    // auth request
+    authUserAPI: builder.query({
+      query: () => {
+        return {
+          url: 'https://dummyjson/auth/login/',
+          method: 'POST',
+        }
+      }
+    })
   }),
 });
 
@@ -59,4 +79,5 @@ export const {
   useGetCategoriesAPIQuery,
   useGetIndividualCategoriesAPIQuery,
   useSearchItemAPIQuery,
+  useUpdateItemAPIMutation,
 } = apiHandle;

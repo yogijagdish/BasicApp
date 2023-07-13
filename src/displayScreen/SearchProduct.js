@@ -52,7 +52,7 @@ export default function SearchProduct() {
   // eslint-disable-next-line react/no-unstable-nested-components
   const IndividualCategories = ({title, price, id, image}) => (
     <SafeAreaView>
-      <ScrollView className="p-8">
+      <ScrollView className="pb-8 pl-8 pr-8">
         <Image
           source={{
             uri: `${image}`,
@@ -106,8 +106,14 @@ export default function SearchProduct() {
         {/* displays the list of individual category */}
         {individualCategoriesList.isSuccess && (
           <SafeAreaView>
+            <Text className="text-2xl p-4 text-textColor">
+              {' '}
+              {individualCategoriesList.data.products[0].category}{' '}
+            </Text>
             <FlatList
               data={individualCategoriesList.data.products}
+              horizontal
+              showsHorizontalScrollIndicator={false}
               renderItem={({item}) => (
                 <IndividualCategories
                   title={item.title}
@@ -120,11 +126,18 @@ export default function SearchProduct() {
             />
           </SafeAreaView>
         )}
+        {/* for searching the product */}
         {searchingProduct.isSuccess && (
           <SafeAreaView>
             <ScrollView>
+              <Text className="text-2xl p-4 text-textColor">
+                {' '}
+                {searchItem}{' '}
+              </Text>
               <FlatList
                 data={searchingProduct.data.products}
+                horizontal
+                showsHorizontalScrollIndicator={false}
                 renderItem={({item}) => (
                   <IndividualCategories
                     title={item.title}

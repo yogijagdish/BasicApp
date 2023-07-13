@@ -7,6 +7,9 @@ module.exports = {
     colors: {
       textColor: '#FA8E00',
       backgroundColor: '#B6DCD4',
+      grayColor: '#1c1917',
+      blueColor: '#1e40af',
+      whiteColor: '#FFFFFF',
     },
   },
   plugins: [],

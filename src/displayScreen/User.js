@@ -1,6 +1,13 @@
 import React from 'react';
 
-import {ScrollView, Text, View, Image, Pressable} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -76,6 +83,16 @@ export default function User({navigation}) {
         <Pressable onPress={handlePress}>
           <View className="border-b-2 border-gray-400 w-80 h-14" />
         </Pressable>
+      </View>
+      <View className="flex items-center mt-4 mb-4">
+        <TouchableOpacity
+          className="p-4 w-32 rounded-full bg-textColor"
+          onPress={() => navigation.navigate('signin')}>
+          <Text className="text-center text-grayColor font-bold text-lg">
+            {' '}
+            Log Out{' '}
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

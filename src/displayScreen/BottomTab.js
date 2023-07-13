@@ -7,9 +7,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Dashboard from './Dashboard';
 import User from './User';
 import SearchProduct from './SearchProduct';
+import Admin from '../AdminScreen/Admin';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const bottomTab = createBottomTabNavigator();
 
@@ -50,6 +52,23 @@ export default function BottomTab() {
               title: 'User',
               tabBarIcon: () => {
                 return <Entypo name="user" color="#FA8E00" size={24} />;
+              },
+            }}
+          />
+          {/* admin pannel */}
+          <bottomTab.Screen
+            name="Admin"
+            component={Admin}
+            options={{
+              title: 'Admin',
+              tabBarIcon: () => {
+                return (
+                  <MaterialIcons
+                    name="admin-panel-settings"
+                    color="#FA8E00"
+                    size={24}
+                  />
+                );
               },
             }}
           />

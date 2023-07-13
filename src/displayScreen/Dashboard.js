@@ -77,10 +77,7 @@ export default function Dashboard({navigation}) {
         <View className="flex flex-row justify-between">
           <View className="flex flex-row gap-6 pl-4 pt-2">
             <Entypo name="menu" size={30} className="ml-4" />
-            <Text selectable className="text-lg font-bold">
-              {' '}
-              Home{' '}
-            </Text>
+            <Text className="text-lg font-bold"> Home </Text>
           </View>
           <View className="flex flex-row pr-4 gap-6 pt-2">
             <Ionicons name="notifications" color="black" size={30} />
@@ -99,19 +96,6 @@ export default function Dashboard({navigation}) {
             Products{' '}
           </Text>
         </View>
-        {/* search bar */}
-        <View className="flex items-center mb-4">
-          <View
-            className="flex flex-row h-10 rounded-lg"
-            style={{backgroundColor: '#d1d5db'}}>
-            <TextInput className="w-72 p-2" placeholder="Search Products" />
-            <TouchableOpacity className="mt-2">
-              <EvilIcons name="search" color="gray" size={30} />
-            </TouchableOpacity>
-          </View>
-
-          {/* in api call if isSuccess is true it renders this part of the code */}
-        </View>
         {isSuccess && (
           <SafeAreaView>
             <FlatList
@@ -122,15 +106,18 @@ export default function Dashboard({navigation}) {
               )}
               keyExtractor={item => item.id}
             />
+            <TouchableOpacity
+              className="flex items-center mt-4 mb-4"
+              onPress={handleLoadMore}>
+              <View className="w-72 p-2 rounded-2xl bg-textColor">
+                <Text className="text-center text-bold text-lg">
+                  {' '}
+                  Load More{' '}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </SafeAreaView>
         )}
-        <TouchableOpacity
-          className="flex items-center mt-4 mb-4"
-          onPress={handleLoadMore}>
-          <View className="w-72 p-2 rounded-2xl bg-textColor">
-            <Text className="text-center text-bold text-lg"> Load More </Text>
-          </View>
-        </TouchableOpacity>
       </ScrollView>
       {/* if isLoading is true it renders this part of the code */}
       {isLoading && (

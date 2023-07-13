@@ -22,8 +22,11 @@ export default function Signin({navigation}) {
   return (
     // container view for whole screen
     <View>
-      <View className="container flex justify-center items-center bg-blue-700 h-64">
-        <Text className="text-3xl text-white font-extrabold"> Sign in </Text>
+      <View className="container flex justify-center items-center bg-backgroundColor h-64">
+        <Text className="text-3xl text-textColor font-extrabold">
+          {' '}
+          Sign in{' '}
+        </Text>
       </View>
       {/* getting user credentials */}
       <View className="flex justify-center items-center">
@@ -43,9 +46,9 @@ export default function Signin({navigation}) {
           secureTextEntry={true}
         />
         <TouchableOpacity
-          className="mt-8 w-64 h-10 bg-blue-600 rounded-2xl"
+          className="mt-8 w-64 h-10 bg-textColor rounded-2xl"
           onPress={handleSubmit}>
-          <Text className="text-center text-lg font-bold text-gray-900 mt-1">
+          <Text className="text-center text-lg font-bold text-backgroundColor mt-1">
             Sign in
           </Text>
         </TouchableOpacity>

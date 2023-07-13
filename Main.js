@@ -6,12 +6,19 @@ import Signin from './src/authScreen/Signin';
 import Signup from './src/authScreen/Signup';
 import Forgetpassword from './src/authScreen/Forgetpassword';
 import BottomTab from './src/displayScreen/BottomTab';
+import startingScreen from './src/authScreen/StartingScreen';
 
+// display screen
 import EditDetail from './src/displayScreen/EditDetail';
 import PermissionScreen from './src/displayScreen/PermissionScreen';
 import ItemScreen from './src/displayScreen/ItemScreen';
 import Cart from './src/displayScreen/Cart';
 import BuyNow from './src/displayScreen/BuyNow';
+
+// admin screen
+import PostProduct from './src/AdminScreen/PostProduct';
+import UpdateProduct from './src/AdminScreen/UpdateProduct';
+import DeleteProduct from './src/AdminScreen/DeleteProduct';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -27,6 +34,8 @@ export default function Main() {
       <NavigationContainer>
         <nativeStack.Navigator>
           <nativeStack.Group screenOptions={{headerShown: false}}>
+            {/* starting screen */}
+            <nativeStack.Screen name="starting" component={startingScreen} />
             {/* signin */}
             <nativeStack.Screen name="signin" component={Signin} />
             {/* signup */}
@@ -73,6 +82,18 @@ export default function Main() {
             component={BuyNow}
             options={{presentation: 'modal', headerShown: false}}
           />
+          {/* admin screen */}
+          <nativeStack.Group screenOptions={{headerShown: false}}>
+            <nativeStack.Screen name="post-product" component={PostProduct} />
+            <nativeStack.Screen
+              name="update-product"
+              component={UpdateProduct}
+            />
+            <nativeStack.Screen
+              name="delete-product"
+              component={DeleteProduct}
+            />
+          </nativeStack.Group>
         </nativeStack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 
 // importing libraries for react icons
@@ -36,7 +37,6 @@ export default function ItemScreen({route, navigation}) {
   const [displayOnScreen, setDisplayOnScreen] = useState(false);
   const [item, setItem] = useState({});
   const [image, setImage] = useState([]);
-  const [duplicateItem, setDuplicateItem] = useState('');
   const [imageData, setImageData] = useState('');
 
   //  functions
@@ -46,9 +46,17 @@ export default function ItemScreen({route, navigation}) {
     const unique_item = cartItem.includes(id);
     if (!unique_item) {
       dispatch(setItemToCart(id));
-    } else {
-      setDuplicateItem('This Item already exists');
-    }
+    } else
+      Alert.alert('Message', 'This Item is already stored in the Cart', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel pressed'),
+        },
+        {
+          text: 'Ok',
+          onPress: () => console.log('ok pressed'),
+        },
+      ]);
   };
 
   // touching the image
@@ -99,15 +107,15 @@ export default function ItemScreen({route, navigation}) {
           <View className="flex flex-row justify-between p-4">
             <View className="flex flex-row">
               <Pressable onPress={() => navigation.goBack()}>
-                <AntDesign name="arrowleft" color="black" size={30} />
+                <AntDesign name="arrowleft" color="#f97316" size={30} />
               </Pressable>
-              <Text className="text-lg ml-4 font-extrabold text-black">
+              <Text className="text-lg ml-4 font-extrabold text-textColor">
                 {' '}
                 Product details{' '}
               </Text>
             </View>
             <Pressable onPress={() => navigation.navigate('cart')}>
-              <Text className="text-lg text-black">
+              <Text className="text-lg text-textColor">
                 {' '}
                 Cart: {cartItem.length}{' '}
               </Text>
@@ -124,7 +132,7 @@ export default function ItemScreen({route, navigation}) {
           <DisplayImages />
           {/* title and description */}
           <View className="ml-4">
-            <Text className="text-lg font-extrabold text-bold text-black">
+            <Text className="text-lg font-extrabold text-bold text-textColor">
               {' '}
               {item.title}
             </Text>
@@ -162,20 +170,22 @@ export default function ItemScreen({route, navigation}) {
           {/* buttons */}
           <View className="flex flex-row justify-around mt-6">
             <TouchableOpacity
-              className="w-32 h-8 bg-yellow-400 rounded-lg"
+              className="w-32 h-8 bg-textColor rounded-lg"
               onPress={handleAddToCart}>
-              <Text className="text-center text-md mt-1"> Add To Cart </Text>
+              <Text className="text-center text-grayColor text-md mt-1">
+                {' '}
+                Add To Cart{' '}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              className="w-32 h-8 bg-blue-400 rounded-lg"
+              className="w-32 h-8 bg-blueColor rounded-lg"
               onPress={() => navigation.navigate('buy-now')}>
-              <Text className="text-center text-md mt-1"> Buy Now </Text>
+              <Text className="text-center text-grayColor text-md mt-1">
+                {' '}
+                Buy Now{' '}
+              </Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-red-700 mt-4 ml-4 font-bold text-lg">
-            {' '}
-            {duplicateItem}{' '}
-          </Text>
         </ScrollView>
       )}
 
