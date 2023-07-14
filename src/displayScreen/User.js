@@ -12,8 +12,6 @@ import {
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const useTemp = require('../Images/blank_picture.jpg');
-
 import {useSelector} from 'react-redux';
 
 export default function User({navigation}) {
@@ -23,10 +21,6 @@ export default function User({navigation}) {
   const mobile = useSelector(state => state.data.mobile);
   const twitter = useSelector(state => state.data.twitter);
   const image = useSelector(state => state.data.image);
-
-  const handlePress = () => {
-    navigation.navigate('user');
-  };
 
   return (
     <ScrollView className="container">
@@ -73,22 +67,19 @@ export default function User({navigation}) {
         </View>
       </View>
       {/* white color view */}
-      <View className="mt-8 ml-8">
-        <Text className="text-lg"> Email </Text>
-        <Text className="text-xl text-black text-bold"> {email} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
-        <Text className="text-lg mt-8"> Phone No </Text>
-        <Text className="text-xl text-black text-bold"> {mobile} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
-        <Text className="text-lg mt-8"> Twitter </Text>
-        <Text className="text-xl text-black text-bold"> {twitter} </Text>
-        <Pressable onPress={handlePress}>
-          <View className="border-b-2 border-gray-400 w-80 h-14" />
-        </Pressable>
+      <View className="p-8">
+        <View className="border-b-2 border-textColor">
+          <Text className="text-lg text-grayColor"> Email </Text>
+          <Text className="text-xl text-black text-bold"> {email} </Text>
+        </View>
+        <View className="border-b-2 border-textColor">
+          <Text className="text-lg text-grayColor mt-8"> Phone No </Text>
+          <Text className="text-xl text-black text-bold"> {mobile} </Text>
+        </View>
+        <View className="border-b-2 border-textColor">
+          <Text className="text-lg text-grayColor mt-8"> Twitter </Text>
+          <Text className="text-xl text-black text-bold"> {twitter} </Text>
+        </View>
       </View>
       <View className="flex items-center mt-4 mb-4">
         <TouchableOpacity

@@ -13,13 +13,22 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import {useSelector} from 'react-redux';
+
 const bottomTab = createBottomTabNavigator();
 
 export default function BottomTab() {
+  const user = useSelector(state => state.data.username);
+
   return (
     <SafeAreaProvider>
       <bottomTab.Navigator>
-        <bottomTab.Group screenOptions={{headerShown: false}}>
+        <bottomTab.Group
+          screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: 'orange',
+            tabBarInactiveTintColor: 'black',
+          }}>
           {/* dashboard */}
           <bottomTab.Screen
             name="dashboard"
@@ -29,8 +38,6 @@ export default function BottomTab() {
               tabBarIcon: () => {
                 return <Entypo name="home" color="#FA8E00" size={24} />;
               },
-              tabBarActiveTintColor: 'orange',
-              tabBarInactiveTintColor: 'black',
             }}
           />
           {/* search product */}
@@ -49,7 +56,7 @@ export default function BottomTab() {
             name="user"
             component={User}
             options={{
-              title: 'User',
+              title: user,
               tabBarIcon: () => {
                 return <Entypo name="user" color="#FA8E00" size={24} />;
               },
