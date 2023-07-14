@@ -2,7 +2,6 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // importing the screens that are to be navigated
-import Signin from './src/authScreen/Signin';
 import Signup from './src/authScreen/Signup';
 import Forgetpassword from './src/authScreen/Forgetpassword';
 import BottomTab from './src/displayScreen/BottomTab';
@@ -36,8 +35,6 @@ export default function Main() {
           <nativeStack.Group screenOptions={{headerShown: false}}>
             {/* starting screen */}
             <nativeStack.Screen name="starting" component={startingScreen} />
-            {/* signin */}
-            <nativeStack.Screen name="signin" component={Signin} />
             {/* signup */}
             <nativeStack.Screen name="signup" component={Signup} />
             {/* forget password */}

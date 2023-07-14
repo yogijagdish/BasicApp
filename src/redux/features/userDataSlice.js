@@ -10,6 +10,8 @@ const initialData = {
   email: 'no email set',
   mobile: 'no mobile no set',
   twitter: 'no twitter set',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcU50X1UOeDaphmUyD6T8ROKs-HjeirpOoapiWbC9cLAqewFy1gthrgUTB9E7nKjRwOVk&usqp=CAU',
 };
 
 const userDataSlice = createSlice({
@@ -31,10 +33,19 @@ const userDataSlice = createSlice({
     setTwitter(state, action) {
       state.twitter = action.payload;
     },
+    setImage(state, action) {
+      state.image = action.payload;
+    },
   },
 });
 
-export const {setUsername, setTitle, setEmail, setMobile, setTwitter} =
-  userDataSlice.actions;
+export const {
+  setUsername,
+  setTitle,
+  setEmail,
+  setMobile,
+  setTwitter,
+  setImage,
+} = userDataSlice.actions;
 
 export default userDataSlice.reducer;

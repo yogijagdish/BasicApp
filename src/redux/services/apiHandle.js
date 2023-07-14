@@ -62,14 +62,19 @@ export const apiHandle = createApi({
       },
     }),
     // auth request
-    authUserAPI: builder.query({
-      query: () => {
+    authUserAPI: builder.mutation({
+      query: userCredentials => {
         return {
-          url: 'https://dummyjson/auth/login/',
+          url: 'auth/login',
           method: 'POST',
-        }
-      }
-    })
+          body: userCredentials,
+          headers: {
+            'content-type': 'application/json',
+          },
+        };
+      },
+    }),
+    // other api
   }),
 });
 
@@ -80,4 +85,5 @@ export const {
   useGetIndividualCategoriesAPIQuery,
   useSearchItemAPIQuery,
   useUpdateItemAPIMutation,
+  useAuthUserAPIMutation,
 } = apiHandle;
