@@ -15,6 +15,7 @@ import {
 
 // importing libraries for react icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // redux
 import {useIndividualProductDisplayAPIQuery} from '../redux/services/apiHandle';
@@ -84,16 +85,17 @@ export default function ItemScreen({route, navigation}) {
   // eslint-disable-next-line react/no-unstable-nested-components
   const DisplayImages = () => (
     <View className="flex flex-row gap-2">
-      {image.map((item, index) => (
-        <TouchableOpacity onPress={() => handleTouchImage(item)}>
+      {image.map((items, index) => (
+        <TouchableOpacity onPress={() => handleTouchImage(items)}>
           <Image
             key={index}
             source={{
-              uri: `${item}`,
+              uri: `${items}`,
             }}
             className="h-16 w-16 ml-4"
             resizeMode="contain"
           />
+          <Text>console.log(items);</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -192,6 +194,11 @@ export default function ItemScreen({route, navigation}) {
       {/* for displaying the image */}
       {displayOnScreen && (
         <View>
+          <TouchableOpacity
+            className="absolute z-50 p-4"
+            onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={36} />
+          </TouchableOpacity>
           <Image
             source={{uri: `${imageData}`}}
             className="h-full w-full"

@@ -22,7 +22,7 @@ import {useSearchItemAPIQuery} from '../redux/services/apiHandle';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 // main function
-export default function SearchProduct() {
+export default function SearchProduct({navigation}) {
   // local state to keep track of what catogary of item is selected
   const [category, setCategory] = useState('');
   const [searchItem, setSearchItem] = useState('');
@@ -52,17 +52,21 @@ export default function SearchProduct() {
   // eslint-disable-next-line react/no-unstable-nested-components
   const IndividualCategories = ({title, price, id, image}) => (
     <SafeAreaView>
-      <ScrollView className="pb-8 pl-8 pr-8">
-        <Image
-          source={{
-            uri: `${image}`,
-          }}
-          className="h-32 w-full"
-          resizeMode="contain"
-        />
-        <Text className="font-bold text-xl text-center mt-4"> {title} </Text>
-        <Text className="text-lg text-center mt-2"> Price: Rs {price} </Text>
-      </ScrollView>
+      <TouchableOpacity
+        // eslint-disable-next-line no-undef
+        onPress={() => navigation.navigate('item-screen', {id: `${id}`})}>
+        <ScrollView className="pb-8 pl-8 pr-8">
+          <Image
+            source={{
+              uri: `${image}`,
+            }}
+            className="h-32 w-full"
+            resizeMode="contain"
+          />
+          <Text className="font-bold text-xl text-center mt-4"> {title} </Text>
+          <Text className="text-lg text-center mt-2"> Price: Rs {price} </Text>
+        </ScrollView>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 
