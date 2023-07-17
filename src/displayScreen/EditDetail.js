@@ -6,10 +6,11 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Pressable,
+  Modal,
+  PermissionsAndroid,
+  Alert,
+  Platform,
 } from 'react-native';
-
-const tempImage = require('../Images/blank_picture.jpg');
 
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -20,8 +21,15 @@ import {
   setTwitter,
 } from '../redux/features/userDataSlice';
 
+// importing the libraries from image picker
+import ImagePicker from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 export default function EditDetail({navigation}) {
   const dispatch = useDispatch();
+
+  const [filePath, setFilePath] = useState({});
+  const [showCameraOptions, setShowCameraOptions] = useState(false);
 
   const [userData, setUserData] = useState({
     username: '',
@@ -36,6 +44,7 @@ export default function EditDetail({navigation}) {
   const email = useSelector(state => state.data.email);
   const mobile = useSelector(state => state.data.mobile);
   const twitter = useSelector(state => state.data.twitter);
+  const image = useSelector(state => state.data.image);
 
   const handleInputChange = (key, value) => {
     setUserData({...userData, [key]: value});
@@ -53,12 +62,146 @@ export default function EditDetail({navigation}) {
     navigation.navigate('permission');
   };
 
+  // asking for camera and memory permissions
+  const requestCameraPermissions = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permissions',
+            message: 'App needs camera permissions',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        console.log(granted);
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  // asking for memory permissions
+  const requestMemoryPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Access your storage',
+            message: 'App want to access your storage',
+            buttonNeutral: 'Ask me later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'Ok',
+          },
+        );
+        console.log('storage:', granted);
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  // capturing image
+  const captureImage = async type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      durationLimit: 30,
+      saveToPhotos: true,
+    };
+    setShowCameraOptions(false);
+    let isCameraPermitted = await requestCameraPermissions();
+    let isStoragePermitted = await requestMemoryPermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        console.log('Response =', response);
+
+        if (response.didCancel) {
+          Alert.alert('Camera access rejected');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          Alert.alert('Camera not available on this device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          Alert.alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          Alert.alert(response.errorMessage);
+          return;
+        }
+        console.log('base64 -> ', response.assets[0].base64);
+        console.log('uri -> ', response.assets[0].uri);
+        console.log('width ->', response.assets[0].width);
+        console.log('height -> ', response.assets[0].height);
+        console.log('fileSize -> ', response.assets[0].fileSize);
+        console.log('type -> ', response.assets[0].type);
+        console.log('fileName -> ', response.assets[0].fileName);
+        setFilePath(response);
+      });
+    }
+  };
+
+  // choosing the file from gallary
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxHeight: 550,
+      maxWidth: 300,
+      quality: 1,
+    };
+    setShowCameraOptions(false);
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        Alert.alert('User cancelled gallery access');
+        return;
+      } else if (response.errorCode == 'camera unavailable') {
+        Alert.alert('Camera not available on this device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        Alert.alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        Alert.alert(response.errorMessage);
+        return;
+      }
+      console.log('base64 -> ', response.assets[0].base64);
+      console.log('uri -> ', response.assets[0].uri);
+      console.log('width ->', response.assets[0].width);
+      console.log('height -> ', response.assets[0].height);
+      console.log('fileSize -> ', response.assets[0].fileSize);
+      console.log('type -> ', response.assets[0].type);
+      console.log('fileName -> ', response.assets[0].fileName);
+      setFilePath(response);
+    });
+  };
+
+  const handleImagePress = () => {
+    console.log('pressed');
+    setShowCameraOptions(true);
+  };
+
   return (
     <ScrollView>
       <View className="flex items-center mt-8">
-        <Pressable onPress={handleProfileClick}>
-          <Image className="h-32 w-32 rounded-full" source={tempImage} />
-        </Pressable>
+        <Image className="h-32 w-32 rounded-full" source={{uri: `${image}`}} />
+        <TouchableOpacity onPress={() => handleImagePress()}>
+          <Text className="pt-4 text-blueColor font-bold"> Update Image </Text>
+        </TouchableOpacity>
       </View>
       <View className="ml-8 mt-8">
         <Text className="font-bold text-md color-gray-400"> Username </Text>
@@ -100,6 +243,31 @@ export default function EditDetail({navigation}) {
           </Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        animationDuration={5000}
+        visible={showCameraOptions}>
+        <TouchableOpacity
+          className="flex items-end p-4"
+          onPress={() => setShowCameraOptions(false)}>
+          <Text className="text-grayColor font-bold"> close </Text>
+        </TouchableOpacity>
+        <View className="flex-1 justify-center items-center gap-6">
+          <TouchableOpacity
+            className="border-2 p-2 w-32 h-10"
+            onPress={() => captureImage('photos')}>
+            <Text className="font-bold"> Open Camera </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="border-2 p-2 w-32 h-10"
+            onPress={() => {
+              chooseFile('photos');
+            }}>
+            <Text className="font-bold"> Choose from Gallary </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }

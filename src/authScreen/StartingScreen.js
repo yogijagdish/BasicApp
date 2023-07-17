@@ -40,6 +40,7 @@ export default function StartingScreen({navigation}) {
   const handleLetsStart = () => {
     setStartVisible(false);
     setLoginVisible(true);
+    setSignupVisible(false);
   };
 
   // stores the username and password entered by the user
@@ -62,6 +63,9 @@ export default function StartingScreen({navigation}) {
   // handles the sigin button
   const handleSignin = async () => {
     console.log(userCredentials);
+    setStartVisible(false);
+    setLoginVisible(false);
+    setSignupVisible(false);
     const response = await data(userCredentials);
     if (response.error) {
       console.log(response.error);
@@ -135,7 +139,7 @@ export default function StartingScreen({navigation}) {
             transparent={true}
             animationDuration={5000}
             visible={isLoginVisible}>
-            <View className="flex flex-row justify-between p-4">
+            <View className="flex flex-row justify-between p-4 bg-opacity-50">
               <TouchableOpacity
                 onPress={() => {
                   setStartVisible(true);

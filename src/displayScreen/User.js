@@ -15,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 
 export default function User({navigation}) {
+  // taking the state from global state
   const username = useSelector(state => state.data.username);
   const title = useSelector(state => state.data.title);
   const email = useSelector(state => state.data.email);
@@ -35,13 +36,13 @@ export default function User({navigation}) {
           </Pressable>
         </View>
         {/* image */}
-        <View className="flex items-center">
+        <TouchableOpacity className="flex items-center">
           <Image
             className="h-32 w-32 rounded-full"
             source={{uri: `${image}`}}
             resizeMode="contain"
           />
-        </View>
+        </TouchableOpacity>
         {/* username and title */}
         <View className="flex items-center mt-6">
           <Text className="text-3xl text-whiteColor font-bold">
