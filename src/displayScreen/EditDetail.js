@@ -1,4 +1,7 @@
+// importing react libraries
 import React, {useState} from 'react';
+
+// importing components from react native
 import {
   Text,
   View,
@@ -12,6 +15,7 @@ import {
   Platform,
 } from 'react-native';
 
+// redux import
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setUsername,
@@ -25,12 +29,16 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
+// main function
 export default function EditDetail({navigation}) {
+  // dispatch object for dispatching actions
   const dispatch = useDispatch();
 
+  // filepath state for storing the image path and show camera options to choose between camera and gallary
   const [filePath, setFilePath] = useState({});
   const [showCameraOptions, setShowCameraOptions] = useState(false);
 
+  // for updating details
   const [userData, setUserData] = useState({
     username: '',
     title: '',
@@ -39,6 +47,7 @@ export default function EditDetail({navigation}) {
     twitter: '',
   });
 
+  // reading the state from global state
   const username = useSelector(state => state.data.username);
   const title = useSelector(state => state.data.title);
   const email = useSelector(state => state.data.email);
@@ -46,20 +55,18 @@ export default function EditDetail({navigation}) {
   const twitter = useSelector(state => state.data.twitter);
   const image = useSelector(state => state.data.image);
 
+  // updates the useState when changed
   const handleInputChange = (key, value) => {
     setUserData({...userData, [key]: value});
   };
 
+  // dispatch actions on clicking submit
   const handleSubmit = () => {
     dispatch(setUsername(userData.username));
     dispatch(setTitle(userData.title));
     dispatch(setEmail(userData.email));
     dispatch(setMobile(userData.mobile));
     dispatch(setTwitter(userData.twitter));
-  };
-
-  const handleProfileClick = () => {
-    navigation.navigate('permission');
   };
 
   // asking for camera and memory permissions
@@ -190,19 +197,23 @@ export default function EditDetail({navigation}) {
     });
   };
 
+  // shows the modal when image is clicked
   const handleImagePress = () => {
     console.log('pressed');
     setShowCameraOptions(true);
   };
 
+  // return fucntion
   return (
     <ScrollView>
       <View className="flex items-center mt-8">
+        {/* image  */}
         <Image className="h-32 w-32 rounded-full" source={{uri: `${image}`}} />
         <TouchableOpacity onPress={() => handleImagePress()}>
           <Text className="pt-4 text-blueColor font-bold"> Update Image </Text>
         </TouchableOpacity>
       </View>
+      {/* username, title and other fields */}
       <View className="ml-8 mt-8">
         <Text className="font-bold text-md color-gray-400"> Username </Text>
         <TextInput
@@ -243,6 +254,7 @@ export default function EditDetail({navigation}) {
           </Text>
         </TouchableOpacity>
       </View>
+      {/* modal that becomes visible only when image is clicked */}
       <Modal
         animationType="slide"
         transparent={true}

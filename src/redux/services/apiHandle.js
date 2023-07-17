@@ -74,6 +74,15 @@ export const apiHandle = createApi({
         };
       },
     }),
+    // delete product
+    deleteProductAPI: builder.mutation({
+      query: id => {
+        return {
+          url: `products/${id}`,
+          method: 'DELETE',
+        };
+      },
+    }),
     // other api
   }),
 });
@@ -86,4 +95,5 @@ export const {
   useSearchItemAPIQuery,
   useUpdateItemAPIMutation,
   useAuthUserAPIMutation,
+  useDeleteProductAPIMutation,
 } = apiHandle;

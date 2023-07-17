@@ -36,13 +36,13 @@ export default function User({navigation}) {
           </Pressable>
         </View>
         {/* image */}
-        <TouchableOpacity className="flex items-center">
+        <View className="flex items-center">
           <Image
             className="h-32 w-32 rounded-full"
             source={{uri: `${image}`}}
             resizeMode="contain"
           />
-        </TouchableOpacity>
+        </View>
         {/* username and title */}
         <View className="flex items-center mt-6">
           <Text className="text-3xl text-whiteColor font-bold">
