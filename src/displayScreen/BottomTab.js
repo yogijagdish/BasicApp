@@ -18,7 +18,7 @@ import {useSelector} from 'react-redux';
 const bottomTab = createBottomTabNavigator();
 
 export default function BottomTab() {
-  const user = useSelector(state => state.data.username);
+  const user = useSelector(state => state.data.title);
 
   return (
     <SafeAreaProvider>

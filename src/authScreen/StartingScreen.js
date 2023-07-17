@@ -175,6 +175,7 @@ export default function StartingScreen({navigation}) {
                   <TextInput
                     className="border-2 rounded-2xl w-80"
                     placeholder="Enter your password here"
+                    secureTextEntry={true}
                     onChangeText={value => handleInputChange('password', value)}
                   />
                   <TouchableOpacity
