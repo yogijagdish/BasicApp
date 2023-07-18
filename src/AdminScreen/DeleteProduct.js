@@ -10,56 +10,58 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   TextInput,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 
 // importing api from redux/services
-import {useGetCategoriesAPIQuery} from '../redux/services/apiHandle';
-import {useGetIndividualCategoriesAPIQuery} from '../redux/services/apiHandle';
 import {useSearchItemAPIQuery} from '../redux/services/apiHandle';
 import {useDeleteProductAPIMutation} from '../redux/services/apiHandle';
 
 // main function
 export default function DeleteProduct({navigation}) {
   // local state to keep track of what catogary of item is selected
-  const [category, setCategory] = useState('');
   const [searchItem, setSearchItem] = useState('');
-  const [id, setId] = useState('');
   // making api calls
-  const categoriesList = useGetCategoriesAPIQuery();
-  const individualCategoriesList = useGetIndividualCategoriesAPIQuery(category);
   const searchingProduct = useSearchItemAPIQuery(searchItem);
-  const deleteProduct = useDeleteProductAPIMutation(id);
+  const [data, {isLoading, isSuccess, isError, isFetching}] =
+    useDeleteProductAPIMutation();
 
-  // fires when any catogery is clicked
-  const handleCategoriesPress = ({item}) => {
-    setCategory(item);
+  const handleDeleteObject = async id => {
+    const response = await data(id);
+    console.log(response);
+    Alert.alert(
+      ` ${response.data.title} Deleted Successfully`,
+      `${response.data.title} deleted on ${response.data.deletedOn}`,
+    );
   };
 
-  // displays the category of items at top
-  // eslint-disable-next-line react/no-unstable-nested-components
-  const Categories = ({item, index}) => (
-    <TouchableOpacity
-      className="p-4 rounded-2xl ml-4"
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{backgroundColor: '#FA8E00'}}
-      onPress={() => handleCategoriesPress({item})}>
-      <Text className="font-bold"> {item} </Text>
-    </TouchableOpacity>
-  );
+  const handleProductSelect = (id, title) => {
+    console.log('handle product select', title);
+    Alert.alert(
+      `Delete ${title}`,
+      `Are you sure you want to delete product ${title}`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () =>
+            Alert.alert(
+              `${title} Deletion Canceled`,
+              `Deletion of the product ${title} cancelled`,
+            ),
+        },
+        {text: 'Yes', onPress: () => handleDeleteObject(id)},
+      ],
+    );
+  };
 
   // displays the list of items in the category
   // eslint-disable-next-line react/no-unstable-nested-components
   const IndividualCategories = ({title, price, id, image}) => (
     <SafeAreaView>
-      <TouchableOpacity
-        // eslint-disable-next-line no-undef
-        onPress={() => {
-          setId(id);
-          deleteProduct.data(id);
-        }}>
-        <ScrollView className="pb-8 pl-8 pr-8">
+      <ScrollView className="pl-8 pr-8">
+        <TouchableOpacity onPress={() => handleProductSelect(id, title)}>
           <Image
             source={{
               uri: `${image}`,
@@ -69,8 +71,8 @@ export default function DeleteProduct({navigation}) {
           />
           <Text className="font-bold text-xl text-center mt-4"> {title} </Text>
           <Text className="text-lg text-center mt-2"> Price: Rs {price} </Text>
-        </ScrollView>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 
@@ -95,33 +97,13 @@ export default function DeleteProduct({navigation}) {
             />
           </View>
         </View>
-        {/* display categories list */}
-        {categoriesList.isSuccess && (
-          <SafeAreaView>
+        {/* diplaying the product */}
+        {searchingProduct.isSuccess && (
+          <ScrollView>
+            <Text className="text-textColor text-2xl pl-4"> {searchItem} </Text>
             <FlatList
-              data={categoriesList.data}
-              renderItem={({item, index}) => (
-                <Categories item={item} index={index} />
-              )}
-              keyExtractor={item => item}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            />
-          </SafeAreaView>
-        )}
-        {/* while category is loading displays loading signal */}
-        {categoriesList.isLoading && <ActivityIndicator size="large" />}
-        {/* displays the list of individual category */}
-        {individualCategoriesList.isSuccess && (
-          <SafeAreaView>
-            <Text className="text-2xl p-4 text-textColor">
-              {' '}
-              {individualCategoriesList.data.products[0].category}{' '}
-            </Text>
-            <FlatList
-              data={individualCategoriesList.data.products}
-              horizontal
-              showsHorizontalScrollIndicator={false}
+              data={searchingProduct.data.products}
+              showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
                 <IndividualCategories
                   title={item.title}
@@ -132,32 +114,7 @@ export default function DeleteProduct({navigation}) {
               )}
               keyExtractor={item => item.id}
             />
-          </SafeAreaView>
-        )}
-        {/* for searching the product */}
-        {searchingProduct.isSuccess && (
-          <SafeAreaView>
-            <ScrollView>
-              <Text className="text-2xl p-4 text-textColor">
-                {' '}
-                {searchItem}{' '}
-              </Text>
-              <FlatList
-                data={searchingProduct.data.products}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item}) => (
-                  <IndividualCategories
-                    title={item.title}
-                    price={item.price}
-                    id={item.id}
-                    image={item.thumbnail}
-                  />
-                )}
-                keyExtractor={item => item.id}
-              />
-            </ScrollView>
-          </SafeAreaView>
+          </ScrollView>
         )}
       </ScrollView>
     </SafeAreaView>
