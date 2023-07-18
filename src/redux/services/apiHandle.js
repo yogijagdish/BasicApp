@@ -83,7 +83,20 @@ export const apiHandle = createApi({
         };
       },
     }),
-    // other api
+    // adding new data api
+    addProductAPI: builder.mutation({
+      query: newProductData => {
+        return {
+          url: 'products/add',
+          method: 'POST',
+          body: newProductData,
+          headers: {
+            'content-type': 'application/json',
+          },
+        };
+      },
+    }),
+    // other api's
   }),
 });
 
@@ -96,4 +109,5 @@ export const {
   useUpdateItemAPIMutation,
   useAuthUserAPIMutation,
   useDeleteProductAPIMutation,
+  useAddProductAPIMutation,
 } = apiHandle;

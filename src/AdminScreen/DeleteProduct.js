@@ -11,7 +11,6 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  ActivityIndicator,
   Alert,
 } from 'react-native';
 
@@ -28,6 +27,7 @@ export default function DeleteProduct({navigation}) {
   const [data, {isLoading, isSuccess, isError, isFetching}] =
     useDeleteProductAPIMutation();
 
+  // delete the object when clicked yes in alert
   const handleDeleteObject = async id => {
     const response = await data(id);
     console.log(response);
@@ -36,7 +36,7 @@ export default function DeleteProduct({navigation}) {
       `${response.data.title} deleted on ${response.data.deletedOn}`,
     );
   };
-
+  // displays the alert when the image is selected
   const handleProductSelect = (id, title) => {
     console.log('handle product select', title);
     Alert.alert(
