@@ -63,6 +63,7 @@ export default function StartingScreen({navigation}) {
   // handles the sigin button
   const handleSignin = async () => {
     console.log(userCredentials);
+    navigation.navigate('bottom-tab');
     setStartVisible(false);
     setLoginVisible(false);
     setSignupVisible(false);

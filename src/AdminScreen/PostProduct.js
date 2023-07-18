@@ -41,7 +41,7 @@ export default function PostProduct() {
   const [data, {isLoading, isError, isFetching, isSuccess}] =
     useAddProductAPIMutation();
 
-    // fires when add button is clicked
+  // fires when add button is clicked
   const handleAddButton = async () => {
     const response = await data(newProductData);
     if (response.error) {
