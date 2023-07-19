@@ -36,6 +36,8 @@ export default function StartingScreen({navigation}) {
   const [isLoginVisible, setLoginVisible] = useState(false);
   const [isSignupVisible, setSignupVisible] = useState(false);
 
+  const [authError, setAuthError] = useState({});
+
   // handles the lets get started button
   const handleLetsStart = () => {
     setStartVisible(false);
@@ -63,14 +65,14 @@ export default function StartingScreen({navigation}) {
   // handles the sigin button
   const handleSignin = async () => {
     console.log(userCredentials);
-    navigation.navigate('bottom-tab');
-    setStartVisible(false);
-    setLoginVisible(false);
-    setSignupVisible(false);
     const response = await data(userCredentials);
+    // for error
     if (response.error) {
-      console.log(response.error);
+      setLoginVisible(true);
+      setAuthError(response.error);
+      console.log(authError);
     }
+    // for response
     if (response.data) {
       dispatch(setUsername(response.data.username));
       dispatch(
@@ -78,8 +80,11 @@ export default function StartingScreen({navigation}) {
       );
       dispatch(setEmail(response.data.email));
       dispatch(setImage(response.data.image));
-      console.log(response);
+      console.log('Response', response);
       navigation.navigate('bottom-tab');
+      setStartVisible(false);
+      setLoginVisible(false);
+      setSignupVisible(false);
     }
   };
 
@@ -113,6 +118,7 @@ export default function StartingScreen({navigation}) {
                 </Text>
               </TouchableOpacity>
             </View>
+            {/* headers */}
             <View className="flex-1 justify-end h-1/4">
               <View className="h-3/4 bg-whiteColor rounded-t-3xl">
                 <Text className="text-3xl text-grayColor mt-6 text-center font-bold">
@@ -123,6 +129,7 @@ export default function StartingScreen({navigation}) {
                   {' '}
                   Lets Start from here{' '}
                 </Text>
+                {/* button */}
                 <TouchableOpacity
                   className="mx-auto my-auto p-2 w-72 bg-blueColor rounded-full"
                   onPress={handleLetsStart}>
@@ -149,6 +156,7 @@ export default function StartingScreen({navigation}) {
                 }}>
                 <Ionicons name="chevron-back-outline" size={24} color="white" />
               </TouchableOpacity>
+              {/* singup page redirect */}
               <TouchableOpacity
                 onPress={() => {
                   setStartVisible(false);
@@ -161,7 +169,9 @@ export default function StartingScreen({navigation}) {
                 </Text>
               </TouchableOpacity>
             </View>
+            {/* blue screen */}
             <View className="flex-1 justify-end h-1/4">
+              {/* headers */}
               <View className="h-3/4 bg-whiteColor rounded-t-3xl">
                 <Text className="text-3xl text-grayColor mt-6 text-center font-bold">
                   {' '}
@@ -171,18 +181,21 @@ export default function StartingScreen({navigation}) {
                   {' '}
                   Enter your details below{' '}
                 </Text>
+                {/* username */}
                 <View className="flex items-center gap-4 pt-6">
                   <TextInput
                     className="border-2 rounded-2xl w-80"
                     placeholder="Enter your Email Address or Username"
                     onChangeText={value => handleInputChange('username', value)}
                   />
+                  {/* password */}
                   <TextInput
                     className="border-2 rounded-2xl w-80"
                     placeholder="Enter your password here"
                     secureTextEntry={true}
                     onChangeText={value => handleInputChange('password', value)}
                   />
+                  {/* sign in button */}
                   <TouchableOpacity
                     className="h-14 w-80 rounded-xl bg-blueColor"
                     onPress={handleSignin}>
@@ -191,8 +204,16 @@ export default function StartingScreen({navigation}) {
                       Sign in{' '}
                     </Text>
                   </TouchableOpacity>
+                  {/* in case authentication failed */}
+                  {isError && (
+                    <Text className="text-textColor font-bold text-lg">
+                      {' '}
+                      Authentication Failed{' '}
+                    </Text>
+                  )}
                   <Text className="font-bold"> Forget your password? </Text>
                 </View>
+                {/* third party authentication */}
                 <View>
                   <Text className="text-center pt-16"> Or sign in with </Text>
                   <View className="p-6 flex flex-row justify-between gap-16">
@@ -237,6 +258,7 @@ export default function StartingScreen({navigation}) {
                 setLoginVisible(true);
                 setSignupVisible(false);
               }}>
+              {/* back button */}
               <Ionicons name="chevron-back-outline" size={24} color="white" />
             </TouchableOpacity>
             <View className="flex-1 justify-end h-1/4">
@@ -250,21 +272,25 @@ export default function StartingScreen({navigation}) {
                   Register yourself here{' '}
                 </Text>
                 <View className="flex items-center gap-4 pt-6">
+                  {/* username */}
                   <TextInput
                     className="border-2 rounded-2xl w-80"
                     placeholder="Enter your username"
                     onChangeText={value => handleInputChange('username', value)}
                   />
+                  {/* email address */}
                   <TextInput
                     className="border-2 rounded-2xl w-80"
-                    placeholder="Enter your Email Address or Username"
+                    placeholder="Enter your Email Address"
                     onChangeText={value => handleInputChange('username', value)}
                   />
+                  {/* password */}
                   <TextInput
                     className="border-2 rounded-2xl w-80"
                     placeholder="Enter your password here"
                     onChangeText={value => handleInputChange('password', value)}
                   />
+                  {/* sign up button */}
                   <TouchableOpacity
                     className="h-14 w-80 rounded-xl bg-blueColor"
                     onPress={handleSignin}>
