@@ -1,11 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+<!-- internet permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+<!-- camera permissions -->
       <uses-permission android:name="android.permission.CAMERA" />
+      <!-- external storage permissions -->
       <uses-permission
   android:name="android.permission.WRITE_EXTERNAL_STORAGE"
 />
+<!-- fine location permissions == it has high accuracy-->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!-- course location == it has low accuracy-->
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -14,6 +21,9 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data 
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyCWf0R27DicM5VhKAImueaHJnC5q2VsZRQ"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

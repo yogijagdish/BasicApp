@@ -13,6 +13,7 @@ import PermissionScreen from './src/displayScreen/PermissionScreen';
 import ItemScreen from './src/displayScreen/ItemScreen';
 import Cart from './src/displayScreen/Cart';
 import BuyNow from './src/displayScreen/BuyNow';
+import LocationMaps from './src/displayScreen/LocationMaps';
 
 // admin screen
 import PostProduct from './src/AdminScreen/PostProduct';
@@ -86,10 +87,13 @@ export default function Main() {
               name="update-product"
               component={UpdateProduct}
             />
+            {/* delete product */}
             <nativeStack.Screen
               name="delete-product"
               component={DeleteProduct}
             />
+            {/* location */}
+            <nativeStack.Screen name="location" component={LocationMaps} />
           </nativeStack.Group>
         </nativeStack.Navigator>
       </NavigationContainer>

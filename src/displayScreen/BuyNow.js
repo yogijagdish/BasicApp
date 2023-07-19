@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export default function BuyNow() {
+export default function BuyNow({navigation}) {
   return (
     <SafeAreaView>
       <ScrollView>
@@ -69,7 +69,8 @@ export default function BuyNow() {
           </View>
           <TouchableOpacity
             className="mt-4 h-10 rounded-xl w-80"
-            style={{backgroundColor: '#FA8E00'}}>
+            style={{backgroundColor: '#FA8E00'}}
+            onPress={() => navigation.navigate('location')}>
             <Text className="text-center text-black text-lg mt-1">
               {' '}
               Place Order
