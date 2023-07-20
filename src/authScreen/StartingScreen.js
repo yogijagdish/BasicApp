@@ -15,6 +15,8 @@ import {
 // safe - area - view
 import {SafeAreaView} from 'react-native-safe-area-context';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // icons import
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -38,11 +40,36 @@ export default function StartingScreen({navigation}) {
 
   const [authError, setAuthError] = useState({});
 
+  // storing the token in async storage
+  const _storeData = async data => {
+    try {
+      await AsyncStorage.setItem('token', data);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  // retreiving the data from async storage
+  const _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        return value;
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   // handles the lets get started button
-  const handleLetsStart = () => {
-    setStartVisible(false);
-    setLoginVisible(true);
-    setSignupVisible(false);
+  const handleLetsStart = async () => {
+    if (await _retrieveData()) {
+      navigation.navigate('bottom-tab');
+    } else {
+      setStartVisible(false);
+      setLoginVisible(true);
+      setSignupVisible(false);
+    }
   };
 
   // stores the username and password entered by the user
@@ -80,11 +107,13 @@ export default function StartingScreen({navigation}) {
       );
       dispatch(setEmail(response.data.email));
       dispatch(setImage(response.data.image));
+      _storeData(response.data.token);
       console.log('Response', response);
       navigation.navigate('bottom-tab');
       setStartVisible(false);
       setLoginVisible(false);
       setSignupVisible(false);
+      _retrieveData();
     }
   };
 
