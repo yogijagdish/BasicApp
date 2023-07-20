@@ -12,6 +12,8 @@ import {
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {useSelector} from 'react-redux';
 
 export default function User({navigation}) {
@@ -22,6 +24,16 @@ export default function User({navigation}) {
   const mobile = useSelector(state => state.data.mobile);
   const twitter = useSelector(state => state.data.twitter);
   const image = useSelector(state => state.data.image);
+
+  // deleting the token
+  const _removeData = async () => {
+    try {
+      await AsyncStorage.removeItem('token');
+      console.log('token removed');
+    } catch (error) {
+      console.warn('error');
+    }
+  };
 
   return (
     <ScrollView className="container">
@@ -82,10 +94,14 @@ export default function User({navigation}) {
           <Text className="text-xl text-black text-bold"> {twitter} </Text>
         </View>
       </View>
+      {/* logout button */}
       <View className="flex items-center mt-4 mb-4">
         <TouchableOpacity
           className="p-4 w-32 rounded-full bg-textColor"
-          onPress={() => navigation.navigate('starting')}>
+          onPress={async () => {
+            await _removeData();
+            navigation.navigate('starting');
+          }}>
           <Text className="text-center text-grayColor font-bold text-lg">
             {' '}
             Log Out{' '}
